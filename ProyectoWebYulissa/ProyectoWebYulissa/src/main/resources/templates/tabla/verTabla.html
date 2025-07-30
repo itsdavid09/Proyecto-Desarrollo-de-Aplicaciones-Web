@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="layout/plantilla :: head"></head>
+    <body>
+        <header th:replace="~{layout/plantilla :: header}"></header>
+
+        <div class="contenido m-5" >
+            <div th:insert="~{tabla/fragmentos :: tabla-contenido}"></div>
+        </div>
+
+        <footer th:replace="~{layout/plantilla :: footer}"></footer>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const editarModal = document.getElementById('editarDatosModal');
+                const filaIdInput = editarModal.querySelector('#filaId');
+
+                editarModal.addEventListener('show.bs.modal', (event) => {
+                    const button = event.relatedTarget;
+                    const filaId = button.getAttribute('data-id');
+
+                    filaIdInput.value = filaId;
+
+                    const fila = JSON.parse(button.getAttribute('data-fila'));
+                    Object.keys(fila).forEach(key => {
+                        const input = editarModal.querySelector(`[name="${key}"]`);
+                        if (input) {
+                            input.value = fila[key];
+                        }
+                    });
+                });
+            });
+        </script>
+
+    </body>
+</html>

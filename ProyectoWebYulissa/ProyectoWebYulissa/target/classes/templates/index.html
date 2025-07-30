@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}"></head>
+    <body>
+        <header th:replace="~{layout/plantilla :: header}"></header>
+
+        <main class="contenido">
+            <!-- Sección bienvenida -->
+            <section class="index-hero container-fluid text-white d-flex align-items-center" style="background-color: #6c87ff; padding: 60px 20px;">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <!-- Logo -->
+                        <div class="col-md-6 text-center text-md-start mb-4 mb-md-0">
+                            <img th:src="@{/img/logo-bdm-grande.png}" alt="Logo BDM" class="logo-hero-grande" />
+                        </div>
+
+                        <!-- Título y botón -->
+                        <div class="col-md-6 text-center text-md-end">
+                            <h2 class="mb-3" style="font-size: 1.3rem;">Empieza a trabajar en base de datos con BDM</h2>
+                            <a th:href="@{/registro/nuevo}" class="btn btn-light">Prueba Gratis</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección beneficios -->
+            <section class="index-beneficios container-fluid text-center" style="background-color: #b3b8ff;">
+                <div class="row m-0">
+                    <div class="col-md-4 p-4 border-end border-white">
+                        <h4>Escalable</h4>
+                    </div>
+                    <div class="col-md-4 p-4 border-end border-white">
+                        <h4>Sencillo</h4>
+                    </div>
+                    <div class="col-md-4 p-4">
+                        <h4>Confiable</h4>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección sobre nosotros -->
+            <section class="container text-center my-5">
+                <h2 class="mb-4">Sobre nosotros</h2>
+                <p class="mb-4">Somos un equipo de desarrolladores que creó una plataforma web para la creación y gestión de tablas de datos sin necesidad de conocimiento previo y con planes adaptativos.</p>
+                <img th:src="@{/img/logo-bdm-horizontal.png}" alt="Logo BDM" class="logo-header" style="max-width: 180px;">
+            </section>
+
+            <!-- Sección planes -->
+            <section class="container text-center my-5">
+                <h2 class="mb-3">NUESTROS PLANES</h2>
+                <p class="mb-4">Escoge el plan que se adapte a tus necesidades</p>
+                <a th:href="@{/planes}" class="btn btn-primary" style="background-color: #007bff; border-color: #007bff;">Ver Planes</a>
+            </section>
+        </main>
+
+        <footer th:replace="~{layout/plantilla :: footer}"></footer>
+    </body>
+</html>
