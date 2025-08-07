@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>Gestión de Tablas</title>
+    </head>
+
+    <body>
+        <section th:fragment="botonesTablas" class="pt-4 bg-light">
+            <div class="px-4 container-fluid">
+                <div class="row g-2 justify-content-between align-items-center">
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#agregarNuevaTabla">
+                            <i class="fas fa-plus"></i> <span th:text="#{tablas.agregarTabla}"></span>
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <a th:href="@{/tabla/listado}" class="btn btn-secondary">
+                            <i class="fas fa-sync-alt"></i> <span th:text="#{tablas.actualizarListado}"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section th:fragment="agregarNuevaTabla">
+            <div class="modal fade" id="agregarNuevaTabla" tabindex="-1" aria-labelledby="agregarNuevaTablaLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="agregarNuevaTablaLabel" th:text="#{tablas.agregarNuevaTabla}"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formNuevaTabla" th:action="@{/tabla/crear}" method="post">
+                                <div class="mb-3">
+                                    <label for="nombreTabla" class="form-label" th:text="#{tablas.nombreTabla}"></label>
+                                    <input type="text" class="form-control" id="nombreTabla" name="nombreTabla" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="descripcionTabla" class="form-label" th:text="#{tablas.descripcionTabla}"></label>
+                                    <textarea class="form-control" id="descripcionTabla" name="descripcionTabla" rows="3" required></textarea>
+                                </div>
+                                <div id="columnasContainer">
+                                    <div class="row mb-3">
+                                        <div class="col">
+                                            <label for="nombreColumna" class="form-label" th:text="#{tablas.nombreColumna}"></label>
+                                            <input type="text" class="form-control" name="nombreColumna[]" required>
+                                        </div>
+                                        <div class="col">
+                                            <label for="tipoColumna" class="form-label" th:text="#{tablas.tipoColumna}"></label>
+                                            <select class="form-select" name="tipoColumna[]" required>
+                                                <option value="INT">INT</option>
+                                                <option value="VARCHAR(255)">VARCHAR</option>
+                                                <option value="DECIMAL(10,2)">DECIMAL</option>
+                                                <option value="DATE">DATE</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-auto">
+                                            <button type="button" class="btn btn-danger mt-4" onclick="eliminarColumna(this)" th:text="#{tablas.eliminarColumna}"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-secondary" onclick="agregarColumna()" th:text="#{tablas.agregarColumna}"></button>
+                                <button type="submit" class="btn btn-primary" th:text="#{tablas.crearTabla}"></button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{tablas.cancelar}"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section th:fragment="TablaListado">
+            <div class="container">
+                <div class="border p-3 ">
+                    <h3 class="text-center mb-0" th:text="#{tablas.misTablas}"></h3>
+                </div>
+
+                <form th:action="@{/tabla/buscarTablas}" method="get" class="mb-3">
+                    <div class="input-group">
+                        <input type="text" name="query" th:placeholder="#{tablas.buscarTabla}" class="form-control" />
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <div style="max-height: 415px; overflow-y: auto;">
+                    <table class="table table-striped table-hover table-bordered">
+                        <thead class="table-dark text-center">
+                            <tr>
+                                <th style="width: 10%;">#</th>
+                                <th style="width: 70%;" th:text="#{tablas.nombre}"></th>
+                                <th style="width: 20%;" th:text="#{tablas.acciones}"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center">
+                            <tr th:each="tabla, iterStat : ${tablas}">
+                                <td th:text="${iterStat.index + 1}"></td>
+                                <td th:text="${tabla.nombre}"></td>
+                                <td>
+                                    <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmarOcultacionModal"
+                                       th:attr="data-id=${tabla.id}">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                    <a th:href="@{/tabla/editar/{tablaId}(tablaId=${tabla.id})}" class="btn btn-success">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <a th:href="@{/tabla/ver/{tablaId}(tablaId=${tabla.id})}" class="btn btn-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Modal de Confirmación -->
+            <div class="modal fade" id="confirmarOcultacionModal" tabindex="-1" aria-labelledby="confirmarOcultacionModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmarOcultacionModalLabel" th:text="#{tablas.confirmarEliminacion}"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" th:text="#{tablas.eliminacionConfirmada}"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{tablas.cancelar}"></button>
+                            <a id="ocultarConfirmado" class="btn btn-danger" th:text="#{tablas.eliminar}"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section th:fragment="editarTabla">
+            <div class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <form method="POST" th:action="@{/tabla/actualizar}" th:object="${tabla}" class="was-validated">
+                            <input type="hidden" name="id" th:field="*{id}" />
+
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-dark text-white">
+                                    <h4 class="mb-0" style="font-size: 1.2rem;" th:text="#{tablas.editarTabla}"></h4>
+                                </div>
+                                <div class="card-body">
+
+                                    <!-- Nombre de la Tabla -->
+                                    <div class="mb-4">
+                                        <label for="nombre" class="form-label" style="font-size: 1rem;" th:text="#{tablas.nombreTabla}"></label>
+                                        <input type="text" class="form-control form-control-lg" name="nombre" th:field="*{nombre}" required="true">
+                                    </div>
+
+                                    <!-- Descripción -->
+                                    <div class="mb-4">
+                                        <label for="descripcion" class="form-label" style="font-size: 1rem;" th:text="#{tablas.descripcion}"></label>
+                                        <textarea class="form-control" name="descripcion" th:field="*{descripcion}" rows="4"></textarea>
+                                    </div>
+
+                                    <!-- Columnas -->
+                                    <div th:each="columna, iter : ${columnas}">
+                                        <input type="hidden" th:field="*{columnas[__${iter.index}__].id}" />
+
+                                        <!-- Nombre de la Columna -->
+                                        <div class="mb-4">
+                                            <label th:for="'nombre' + ${columna.id}" class="form-label" style="font-size: 1rem;" th:text="#{tablas.nombreColumna}"></label>
+                                            <input type="text" class="form-control" th:field="*{columnas[__${iter.index}__].nombre}" required>
+                                        </div>
+
+                                        <!-- Tipo de Dato -->
+                                        <div class="mb-4">
+                                            <label th:for="'tipoDato' + ${columna.id}" class="form-label" style="font-size: 1rem;" th:text="#{tablas.tipoDato}"></label>
+                                            <select class="form-select" th:field="*{columnas[__${iter.index}__].tipoDato}" required>
+                                                <option value="INT" th:selected="${columna.tipoDato == 'INT'}" th:text="#{tablas.int}">INT</option>
+                                                <option value="VARCHAR" th:selected="${columna.tipoDato == 'VARCHAR'}" th:text="#{tablas.varchar}">VARCHAR</option>
+                                                <option value="DECIMAL" th:selected="${columna.tipoDato == 'DECIMAL'}" th:text="#{tablas.decimal}">DECIMAL</option>
+                                                <option value="DATE" th:selected="${columna.tipoDato == 'DATE'}" th:text="#{tablas.date}">DATE</option>
+                                            </select>
+                                        </div>
+
+                                        <hr class="my-4">
+                                    </div>
+
+                                    <!-- Botones de Acción -->
+                                    <div class="d-flex justify-content-between">
+                                        <a th:href="@{/tabla/listado}" class="btn btn-secondary btn-lg" style="font-size: 1rem;" th:text="#{tablas.cancelar}"></a>
+                                        <button type="submit" class="btn btn-success btn-lg" style="font-size: 1rem;" th:text="#{tablas.guardarCambios}"></button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+        <section th:fragment="tabla-contenido">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 th:text="#{tabla.nombre}" class="border-bottom pb-2">Tabla: Nombre</h3>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarDatosModal">
+                    <i class="fas fa-plus"></i> <span th:text="#{tabla.agregarElemento}">Agregar Elemento</span>
+                </button>
+            </div>
+
+            <h5 th:text="#{tabla.descripcion}" class="text-secondary border-bottom pb-2 mb-3">Descripción: Descripción de la tabla</h5>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-hover table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th th:each="columna : ${columnas}" th:text="${columna.nombre}"></th>
+                            <th th:text="#{tabla.acciones}">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="fila, iterStat : ${filas}">
+                            <td th:each="columna : ${columnas}" th:text="${fila[columna.nombre]}"></td>
+                            <td style="width: 120px; text-align: center;"> 
+                                <button class="btn btn-success btn-sm" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#editarDatosModal" 
+                                        th:attr="data-id=${fila['id']}, data-valores=${fila}">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+
+                                <form th:action="@{/tabla/borrar}" method="post" style="display:inline;">
+                                    <input type="hidden" name="filaId" th:value="${fila['id']}" />
+                                    <input type="hidden" name="tablaId" th:value="${tabla.id}" />
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal fade" id="editarDatosModal" tabindex="-1" aria-labelledby="editarDatosModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form th:action="@{/tabla/editar}" method="post">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editarDatosModalLabel" th:text="#{editarDatosModal.titulo}">Editar Fila</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" id="filaId" name="filaId" />
+                                <input type="hidden" name="tablaId" th:value="${tabla.id}" />
+                                <div th:each="columna : ${columnas}">
+                                    <div class="mb-3">
+                                        <label th:for="${columna.nombre}" th:text="${columna.nombre}" class="form-label"></label>
+                                        <input type="text" class="form-control" 
+                                               th:id="${columna.nombre}" 
+                                               th:name="${columna.nombre}" 
+                                               th:attr="data-columna=${columna.nombre}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{tabla.cerrar}">Cancelar</button>
+                                <button type="submit" class="btn btn-primary" th:text="#{editarDatosModal.botonGuardar}">Guardar Cambios</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="agregarDatosModal" tabindex="-1" aria-labelledby="agregarDatosModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form th:action="@{/tabla/agregarDatos}" method="post">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="agregarDatosModalLabel" th:text="#{agregarDatosModal.titulo}">Agregar Datos</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="tablaId" th:value="${tabla.id}" />
+                                <div th:each="columna : ${columnas}">
+                                    <div class="mb-3">
+                                        <label class="form-label" th:for="${columna.nombre}" th:text="${columna.nombre}"></label>
+                                        <input type="text" class="form-control" th:id="${columna.nombre}" th:name="${columna.nombre}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{tabla.cerrar}">Cerrar</button>
+                                <button type="submit" class="btn btn-primary" th:text="#{agregarDatosModal.botonGuardar}">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+
+</html>

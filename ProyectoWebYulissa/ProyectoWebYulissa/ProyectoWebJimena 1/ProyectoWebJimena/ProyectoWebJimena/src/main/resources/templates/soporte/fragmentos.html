@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="~{layout/plantilla :: head}">
+    <title>Soporte</title>
+</head>
+<body>
+    <section th:fragment="formulario">
+        <section class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+            <div class="rounded shadow-lg px-4 py-5" style="background-color: #f6f6ff; max-width: 650px; width: 100%;">
+                <h1 class="text-center mb-3" style="font-weight: bold;">CONTACTENOS</h1>
+                <p class="text-center mb-4">
+                    Contacta a <strong>BDM</strong> para cualquier incógnita sobre la página o sus productos.
+                    Para hacerlo, por favor rellenar el siguiente formulario
+                </p>
+                <form method="POST" th:action="@{/soporte/correo}" th:object="${mensaje}" enctype="multipart/form-data">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
+                            <input type="text" name="nombre" id="nombre" class="form-control"
+                                   style="background-color: #cdd6ff; border-radius: 8px; box-shadow: 2px 2px 4px rgba(0,0,0,0.2);" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="apellido" class="form-label">Apellido <span class="text-danger">*</span></label>
+                            <input type="text" name="apellido" id="apellido" class="form-control"
+                                   style="background-color: #cdd6ff; border-radius: 8px; box-shadow: 2px 2px 4px rgba(0,0,0,0.2);" required />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                        <input type="email" name="email" id="email" class="form-control"
+                               style="background-color: #cdd6ff; border-radius: 8px; box-shadow: 2px 2px 4px rgba(0,0,0,0.2);" required />
+                    </div>
+                    <div class="mb-4">
+                        <label for="mensaje" class="form-label">Mensaje <span class="text-danger">*</span></label>
+                        <textarea name="cuerpo" id="mensaje" class="form-control" rows="5"
+                                  style="background-color: #cdd6ff; border-radius: 8px; box-shadow: 2px 2px 4px rgba(0,0,0,0.2);" required></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn text-white"
+                                style="background-color: #80aaff; border-radius: 6px; font-weight: bold;">
+                            ENVIAR
+                        </button>
+                    </div>
+                    <p class="text-muted mt-3" style="font-size: 0.9rem;">
+                        <span class="text-danger">*</span> Los campos son obligatorios.
+                    </p>
+                </form>
+            </div>
+        </section>
+    </section>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
