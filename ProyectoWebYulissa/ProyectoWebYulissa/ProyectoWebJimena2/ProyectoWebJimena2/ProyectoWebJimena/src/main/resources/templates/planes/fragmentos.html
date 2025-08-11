@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title th:text="#{aplicacion.titulo}">Gestión de Tablas</title>
+    </head>
+    <body>
+        <section th:fragment="plantilla-planes">
+            <div class="container text-center mt-5">
+                <h2 style="font-weight: bold; font-size: 28px; margin-bottom: 10px;" th:text="#{planes.titulo}">Elige el plan perfecto para impulsar tu proyecto</h2>
+                <p style="margin-bottom: 50px; font-size: 16px;" th:text="#{planes.subtitulo}">Encuentra la opción que mejor se adapta a tus necesidades y empieza a crecer con nosotros</p>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <div class="plan-card">
+                            <h3 class="plan-title">[[#{planes.base.nombre}]]</h3>
+                            <hr />
+                            <p>[[#{planes.base.descripcion}]]</p>
+                            <p>[[#{planes.base.columnas}]]</p>
+                            <p>[[#{planes.base.elementos}]]</p>
+                            <p class="plan-precio">[[#{planes.base.precio}]]</p>
+                            <form th:action="@{/carrito/guardar}" method="POST">
+                                <input type="hidden" name="nuevoPlan" value="BASE" />
+                                <button type="submit" class="btn btn-primary btn-plan-base">[[#{planes.boton}]]</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="plan-card">
+                            <h3 class="plan-title">[[#{planes.oro.nombre}]]</h3>
+                            <hr />
+                            <p>[[#{planes.oro.descripcion}]]</p>
+                            <p>[[#{planes.oro.columnas}]]</p>
+                            <p>[[#{planes.oro.elementos}]]</p>
+                            <p class="plan-precio">[[#{planes.oro.precio}]]</p>
+                            <a th:href="@{/carrito/oro}">
+                                <button class="btn btn-warning btn-plan-oro">[[#{planes.boton}]]</button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="plan-card">
+                            <h3 class="plan-title">[[#{planes.platino.nombre}]]</h3>
+                            <hr />
+                            <p>[[#{planes.platino.descripcion}]]</p>
+                            <p>[[#{planes.platino.columnas}]]</p>
+                            <p>[[#{planes.platino.elementos}]]</p>
+                            <p class="plan-precio">[[#{planes.platino.precio}]]</p>
+                            <a th:href="@{/carrito/platino}">
+                                <button class="btn btn-dark btn-plan-platino">[[#{planes.boton}]]</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

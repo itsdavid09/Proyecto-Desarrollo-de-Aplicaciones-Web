@@ -1,0 +1,210 @@
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans);
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+#main-header {
+    background-color: #ffc107;
+    color: #212529;
+}
+.nav-link {
+    font-size: 20px;
+    margin-right: 30px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    white-space: nowrap;
+}
+.navbar-brand, .nav-link {
+    color: #000000 !important;
+}
+.contenido{
+    flex: 1;
+    text-align: center;
+}
+
+/*SECCION CUENTA Y PLANES:*/
+.active {
+    background-color: #495057 !important;
+}
+
+.profile-section {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    background-color: #ddd;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+.profile-section h2 {
+    margin: 10px 0;
+    font-size: 24px;
+}
+.profile-section p {
+    margin: 5px 0;
+    color: #6c757d;
+}
+.profile-section button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+.database-section, .plan-section {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+.database-section h2, .plan-section h2 {
+    margin-top: 0;
+    font-size: 22px;
+    border-bottom: 2px solid #f1f1f1;
+    padding-bottom: 10px;
+}
+.database-icon, .plan-feature {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f1f1;
+}
+.database-icon:last-child, .plan-feature:last-child {
+    border-bottom: none;
+}
+.database-icon i, .plan-feature i {
+    margin-right: 10px;
+    color: #17a2b8;
+}
+.database-icon:hover, .plan-feature:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+
+.plan-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.plan-card h3 {
+    margin-top: 0;
+    font-size: 24px;
+    border-bottom: 2px solid #f1f1f1;
+    padding-bottom: 10px;
+}
+.plan-card p {
+    margin: 10px 0;
+    color: #6c757d;
+}
+.plan-card button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    border-radius: 20px;
+}
+
+
+
+/*SECCION EXTRA*/
+
+
+
+/*LAYOUT*/
+.header, .navbar {
+    background-color: #ffffff !important;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+.logo-header {
+    height: 40px;
+    object-fit: contain;
+}
+.nav-link:hover {
+    color: #007bff !important;
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.registro-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+
+
+/*REGISTRO*/
+.logo-registro {
+    max-height: 600px;
+    width: 100%;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+.registro-wrapper {
+    background-color: #f8f9fa;
+    padding: 40px 20px;
+}
+.registro-volver {
+    display: inline-block;
+    color: #007bff;
+    font-size: 14px;
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+.registro-volver:hover {
+    text-decoration: underline;
+}
+.registro-titulo {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-align: left;
+}
+.registro-formulario input {
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+}
+.registro-formulario button {
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 15px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+}
+.registro-formulario button:hover {
+    background-color: #0056b3;
+}
+
+/* LOGO GRANDE EN INICIO */
+.logo-hero-grande {
+    max-height: 365px;
+    width: 100%;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+/* FOTO PERFIL */
+.profile-picture {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background-color: #a8c4f7; /* Azul claro como el del Figma */
+    font-size: 18px;
+    text-align: center;
+}
+

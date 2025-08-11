@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head th:replace="layout/plantilla :: head"></head>
+   <style>
+            .container {
+            }
+            .plan-card {
+                background-color: #ffffff;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                padding: 30px;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .plan-card h3 {
+                margin-top: 0;
+                font-size: 24px;
+                border-bottom: 2px solid #f1f1f1;
+                padding-bottom: 10px;
+            }
+            .plan-card p {
+                margin: 10px 0;
+                color: #6c757d;
+            }
+            .plan-card button {
+                margin-top: 20px;
+                padding: 10px 20px;
+                border-radius: 20px;
+            }
+        </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuenta de Usuario</title>
+</head>
+<body>
+    <section th:replace="layout/plantilla :: header"/>
+    <div class="contenido mt-5">
+    <section th:replace="cuenta/fragmentos :: plantilla-cuenta"/>
+    <section th:replace="cuenta/fragmentos :: editarUsuario"/>
+    </div>
+    <footer th:replace="layout/plantilla :: footer"/>
+</body>
+</html>

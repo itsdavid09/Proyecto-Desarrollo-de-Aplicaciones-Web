@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>Gestión de Tablas</title>
+    </head>
+    <body>
+        <!-- Fragmento de la Sección de Cuenta -->
+        <section th:fragment="plantilla-cuenta">
+            <div class="container">
+                <div class="row">
+                    <!-- Columna de Perfil -->
+                    <div class="col-md-4">
+                        <div class="profile-section text-center">
+
+                            <div class="profile-picture mx-auto d-flex align-items-center justify-content-center text-white fw-bold"
+                                 th:if="${session.usuarioLogueado.rutaImagen == null}">
+                                FOTO DE PERFIL
+                            </div>
+                            <div class="profile-picture mx-auto d-flex align-items-center justify-content-center text-white fw-bold"
+                                 th:if="${session.usuarioLogueado.rutaImagen != null}">
+                                <img th:src="${session.usuarioLogueado.rutaImagen}" alt="Foto de perfil" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover;">
+                            </div>
+
+                            <h2 th:text="${session.usuarioLogueado.usuario}"></h2>
+                            <p th:text="${session.usuarioLogueado.email}"></p>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editarUsuario">
+                                <i class="fas fa-edit"></i> [[#{cuenta.editarPerfil}]]
+                            </button>
+                            <form th:action="@{/cuenta/borrar-foto}" method="POST">
+                                <button type="submit" class="btn btn-danger mt-2">
+                                    <i class="fas fa-trash-alt"></i> Borrar Foto de Perfil
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+                    <!-- Columna de Tablas y Plan -->
+                    <div class="col-md-8">
+                        <!-- Sección de Tablas -->
+                        <div class="database-section">
+                            <h2>[[#{cuenta.tusTablas}]]</h2>
+                            <div class="database-icon" th:each="tabla : ${tablas}">
+                                <i class="fas fa-database"></i> [[${tabla.nombre}]]
+                            </div>
+                        </div>
+                        <!-- Sección de Plan -->
+                        <div class="plan-section" th:switch="${session.usuarioLogueado.plan}">
+                            <h2 style="text-transform:uppercase" th:text="#{cuenta.tuPlanActual} + ': ' + ${session.usuarioLogueado.plan}"></h2>
+
+                            <!-- Plan BASE -->
+                            <div class="plan-feature" th:if="${session.usuarioLogueado.plan == 'BASE'}">
+                                <i class="fas fa-check-circle"></i> <span th:text="#{plan.base.tabla}"></span>
+                            </div>
+                            <div class="plan-feature" th:if="${session.usuarioLogueado.plan == 'BASE'}">
+                                <i class="fas fa-check-circle"></i> <span th:text="#{plan.base.columnas}"></span>
+                            </div>
+                            <div class="plan-feature" th:if="${session.usuarioLogueado.plan == 'BASE'}">
+                                <i class="fas fa-check-circle"></i> <span th:text="#{plan.base.elementos}"></span>
+                            </div>
+                            <div class="plan-feature" th:if="${session.usuarioLogueado.plan == 'BASE'}">
+                                <i class="fas fa-check-circle"></i> <span th:text="#{plan.base.precio}"></span>
+                            </div>
+
+                            <!-- Plan ORO -->
+                            <div class="plan-feature" th:if="${session.usuarioLogueado.plan == 'ORO'}">
+                                <i class="fas fa-check-circle"></i> <span th:text="#{plan.oro.tablas}"></span>
+                            </div>
+                            <div class="plan-feature" th:if="${session.usuarioLogueado.plan == 'ORO'}">
+                                <i class="fas fa-check-circle"></i> <span th:text="#{plan.oro.columnas}"></span>
+                            </div>
+                            <div class="plan-feature" th:if="${session.usuarioLogueado.plan == 'ORO'}">
+                                <i class="fas fa-check-circle"></i> <span th:text="#{plan.oro.elementos}"></span>
+                            </div>
+                            <div class="plan-feature" th:if="${session.usuarioLogueado.plan == 'ORO'}">
+                                <i class="fas fa-check-circle"></i> <span th:text="#{plan.oro.precio}"></span>
+                            </div>
+
+                            <!-- Plan PLATINO -->
+                            <div class="plan-feature" th:if="${session.usuarioLogueado.plan == 'PLATINO'}">
+                                <i class="fas fa-check-circle"></i> <span th:text="#{plan.platino.tablas}"></span>
+                            </div>
+                            <div class="plan-feature" th:if="${session.usuarioLogueado.plan == 'PLATINO'}">
+                                <i class="fas fa-check-circle"></i> <span th:text="#{plan.platino.columnas}"></span>
+                            </div>
+                            <div class="plan-feature" th:if="${session.usuarioLogueado.plan == 'PLATINO'}">
+                                <i class="fas fa-check-circle"></i> <span th:text="#{plan.platino.elementos}"></span>
+                            </div>
+                            <div class="plan-feature" th:if="${session.usuarioLogueado.plan == 'PLATINO'}">
+                                <i class="fas fa-check-circle"></i> <span th:text="#{plan.platino.precio}"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modal para Editar Usuario -->
+        <section th:fragment="editarUsuario">
+            <div id="editarUsuario" class="modal fade" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header bg-info text-white">
+                            <h5 class="modal-title">[[#{cuenta.editarUsuario}]]</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form th:action="@{/cuenta/editar}" th:object="${usuario}" method="POST" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <!-- Campos del formulario -->
+                                <div class="mb-3">
+                                    <label for="usuario">[[#{usuario.nombreUsuario}]]:</label>
+                                    <input type="text" class="form-control" id="usuario" name="usuario" required th:value="${session.usuarioLogueado.usuario}" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="cedula">[[#{usuario.cedula}]]:</label>
+                                    <input type="text" class="form-control" name="cedula" required th:value="${session.usuarioLogueado.cedula}" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="direccion">[[#{usuario.direccion}]]:</label>
+                                    <input type="text" class="form-control" name="direccion" required th:value="${session.usuarioLogueado.direccion}" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nacimiento">[[#{usuario.nacimiento}]]:</label>
+                                    <input type="date" class="form-control" name="nacimiento" required th:value="${session.usuarioLogueado.nacimiento}" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email">[[#{usuario.email}]]:</label>
+                                    <input type="email" class="form-control" name="email" required th:value="${session.usuarioLogueado.email}" />
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phoneNumber">[[#{usuario.telefono}]]:</label>
+                                    <input type="text" class="form-control" name="phoneNumber" required th:value="${session.usuarioLogueado.phoneNumber}" />
+                                </div>
+                                <div>
+                                    <div class="mb-3">
+                                        <label for="imagen">[[#{usuario.imagen}]]</label>
+                                        <input class="form-control" type="file" name="imagen"
+                                               onchange="readURL(this);" />
+                                        <img id="blah" th:src="@{${session.usuarioLogueado.rutaImagen}}" alt="no img" height="200"/>
+                                    </div>
+                                    <!-- Campos ocultos -->
+                                    <input type="hidden" name="contrasena" th:value="${session.usuarioLogueado.contrasena}" />
+                                    <input type="hidden" name="plan" th:value="${session.usuarioLogueado.plan}" />
+                                    <input type="hidden" name="id" th:value="${session.usuarioLogueado.id}" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">[[#{usuario.guardar}]]</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">[[#{usuario.cancelar}]]</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
